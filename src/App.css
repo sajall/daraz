@@ -1,26 +1,15 @@
-#category{
-  width: 200px;
-  height: 400px;
-  background-color: white !important;
-  border: 1px solid black;
-  border-radius: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  /* display: inline-block; */
-  
-}
+
 #main{
   display: flex;
   /* background-color: aliceblue; */
   margin-top: 20px;
 }
-#cards{
+/* #cards{
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
   justify-content: center;
-}
+} */
 #categorybtn{
   border: none;
   background-color: transparent;

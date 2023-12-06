@@ -3,10 +3,21 @@
 import { useState } from "react";
 import "./Product.css";
 import { useParams } from "react-router-dom";
-// import { BrowserRouter , Route , Routes } from 'react-router-dom';
+import { useSelector,  useDispatch} from "react-redux";
+import store from "../../Store/Store";
+import { Cart } from "../Cart/Cart";
 
-export function ProductDetails({ products }) {
+
+export function ProductDetails() {
   let [quantity, setQuantity] = useState(1);
+
+  // using dispatch for sending object of desired product to the store
+
+  let dispatch = useDispatch();
+  // useSelector 
+  let data = useSelector((store) => {
+    return store;
+  });
 
   // params for dynamic routes
   const params = useParams();
@@ -17,108 +28,84 @@ export function ProductDetails({ products }) {
 
   console.log(productId, "productId");
 
-  const desiredProduct = products.find((prod) => prod.id == productId);
+  const desiredProduct = data.productsSection.products.find((prod) => prod.id == productId);
 
   console.log(desiredProduct, "desiredProduct");
 
   return (
-    <>
-      <section className="h-100 gradient-custom ">
-        {/* <div className="container py-5 bg-danger" > */}
-        {/* <div className="row d-flex justify-content-center my-4 bg-success"> */}
-        <div className="col-md-12 bg-primary">
-          <div className="card col-md-12 mb-4 ">
-            <div className="card-body col-md-12 " id="cardBody">
-              {/* Single item */}
-              <div className="row">
-                <div className="col-lg-3 col-md-12 mb-4 mb-lg-0">
-                  {/* Image */}
-                  <div
-                    className="bg-image hover-overlay hover-zoom ripple rounded"
-                    data-mdb-ripple-color="light"
-                  >
-                    <img
-                      src={desiredProduct?.src}
-                      className="w-100"
-                      alt="Blue Jeans Jacket"
-                      height="300px"
-                      width="300px "
-                    />
-                    <a href="#!">
-                      <div
-                        className="mask"
-                        style={{ backgroundColor: "rgba(251, 251, 251, 0.2)" }}
-                      />
-                    </a>
-                  </div>
-                  {/* Image */}
-                </div>
 
-                <div className="col-lg-5 col-md-6 mb-4 mb-lg-0">
-                  {/* Data */}
-                  <p>
-                    <strong>{desiredProduct?.category}</strong>
-                  </p>
-                  <p>Color: blue</p>
-                  <p>Size: M</p>
-                  <p className="text-start ">
-                    <strong>${desiredProduct.price}</strong>
-                  </p>
+    <div id="main">
+      <div id="left">
+        <img
+          src={desiredProduct?.src}
+          className="w-100"
+          alt="Blue Jeans Jacket"
+          height="400px"
+          width="50px "
+        />
+      </div>
 
-                  <div className="d-flex mb-4" style={{ maxWidth: 300 }}>
-                    <button
-                      className="btn btn-primary  px-3 me-2"
-                      onClick={() => {
-                        if (quantity > 1) {
-                          setQuantity(quantity - 1);
-                        }
-
-                        // alert('this is me')
-                      }}
-                    >
-                      -
-                      <i className="fas fa-minus" />
-                    </button>
-                    <div className="form-outline">
-                      <input
-                        id="form1"
-                        //   min={0}
-                        name="quantity"
-                        value={quantity}
-                        type="number"
-                        //   className="form-control"
-                        //   value={quantity}
-                      />
-                      {/* <p>{quantity}</p> */}
-
-                      <label className="form-label" htmlFor="form1">
-                        Quantity
-                      </label>
-                    </div>
-                    <button
-                      className="btn btn-primary px-3 ms-2"
-                      onClick={() => {
-                        if (quantity < 5) {
-                          setQuantity(quantity + 1);
-                        }
-                        //    alert('this is me')
-                      }}
-                    >
-                      +
-                      <i className="fas fa-plus" />
-                    </button>
-                  </div>
-
-                  {/* Data */}
-                </div>
-              </div>
-            </div>
-          </div>
+      <div className="d-flex" id="right" >
+        <div>
+          <h4> 
+          Nihil sit architecto ipsam sunt veritatis nesciunt excepturi vel,aliquam quibusdam</h4>
+        <strong>{desiredProduct?.category}</strong>
+          <img src="https://cdn-icons-png.flaticon.com/512/8367/8367735.png" style={{width:"20px" }} alt="" />
+          <img  src="https://www.iconpacks.net/icons/1/free-heart-icon-492-thumb.png" style={{width:"20px"}} alt="" />
+          <hr />
         </div>
+      <div id="inside_right " >
+        
+      <p >
+      </p>
 
-        {/* </div> */}
-        {/* </div> */}
-      </section>
-    </>
+        <h3 style={{color: '#f85606'}}>RS. {desiredProduct?.price}</h3>
+
+        <div className="form-outline " id="quantity">
+   
+          <p className="form-label" htmlFor="form1" style={{color: '#757575'}}>
+            Quantity
+          </p>
+          <button
+            className="btn btn-primary quantitybtn"
+            onClick={() => {
+              if (quantity > 1) {
+                setQuantity(quantity - 1);
+              }
+            }}
+            >
+            -
+          </button>
+          <div id="input1">
+          <input id="form1" name="quantity" value={quantity} type="text"  />
+          </div>
+          <button
+            className="btn btn-primary quantitybtn "
+            onClick={() => {
+              if (quantity < 5) {
+                setQuantity(quantity + 1);
+              }
+            }}
+            >
+            +
+          </button>
+        </div>
+            </div>
+
+
+            <div id="neechywalubtn">
+              <button id='btn1'>Buy Now</button>
+              <button id="btn2" onClick={()=>{
+                
+                dispatch({
+                  type:"ADD_TO_CART",
+                  payload:desiredProduct.id
+                })
+
+              }}>Add to Cart</button>
+            </div>
+      </div>
+{/* <Cart/> */}
+    </div>
   );
 }

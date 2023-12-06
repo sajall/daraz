@@ -1,14 +1,27 @@
 import { Link, NavLink } from "react-router-dom";
 import Carousel from "../Carousel/Carousel";
 import { Cards } from "../Navbar/Cards/Cards";
-// import { BrowserRouter , Route ,Routes } from "react-router-dom";
+import "./Home.css";
+import { useState } from "react";
 
-export default function Home({ categories, products, cheez, setCheez }) {
+import { useSelector,  useDispatch} from "react-redux";
+import store from "../../Store/Store";
+// home componenet
+export default function Home() {
+  let [cheez, setCheez] = useState("");
+
+  let data = useSelector((store) => {
+    return store;
+});
+
   return (
     <>
-      <div id="category">
+    <div id="main">
         <Carousel />
-        {categories.map((item, i) => {
+      <div id="category">
+        {
+        data.categoriesSection && data.categoriesSection
+        .map((item, i) => {
           return (
             <button
               key={i}
@@ -22,29 +35,32 @@ export default function Home({ categories, products, cheez, setCheez }) {
               onClick={() => {
                 setCheez(item);
               }}
-            >
+              >
               {item}
             </button>
           );
         })}
       </div>
-      {products
-        .filter((item) => {
-          if (item.category === cheez || cheez === "") {
+        </div>
+        {/* cards */}
+     <div id="cards">
+      
+      {
+        // && item.category.includes(data.productsSection.searched
+        // || cheez === ""
+      data.productsSection.products && data.productsSection.products
+       .filter((item) => {
+          if (item.category === cheez ||  cheez === "" || item.category.includes(data.productsSection.searched)  ) {
             return item;
           }
         })
         .map((product, index) => {
           return (
-            <NavLink
-              key={index}
-              id="cards"
-              to={`product-details/${product.id}`}
-            >
+          
               <Cards product={product}></Cards>
-            </NavLink>
           );
         })}
+    </div>
     </>
   );
 }
