@@ -7,9 +7,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link , NavLink } from 'react-router-dom';  
 
 export function Navbar(){
+
 let dispatch = useDispatch();
-    return (
-        <>
+let userLoggedin = useSelector((store)=>store.UsersSection.userLoggedin);
+return (
+  <>
   
 
          <section className="border mb-4 d-flex align-items-center flex-column bg-#cd3f00" >
@@ -24,7 +26,7 @@ let dispatch = useDispatch();
         </Link>
         </li>
       <li>Draz Affiliate Program</li>
-      <li> <Link to='/show-users'>Users</Link></li>
+      <li> <Link  style={{textDecoration : 'none' , color: 'white'}} to='/show-users'>Users</Link></li>
       <li>Help & support</li>
       <li>Daraz logistics partner</li>
     </ul>
@@ -65,26 +67,52 @@ let dispatch = useDispatch();
               Home
             </Link>
           </li>
-          <li className="nav-item d-flex hover">
+          {/* dashboard */}
+         { userLoggedin ? <li className="nav-item hover">
+            <Link className="nav-link active pages" aria-current="page" to='/Dashboard'>
+              Dashboard
+            </Link>
+          </li> : null}
+
+          {userLoggedin ?null :
+            <li className="nav-item d-flex hover">
               <img src="./user.png" style={{width:'20px', height:'20px'}} alt="" />
             <Link className="nav-link pages"  to='/Login'>
               Login
 
             </Link>
           </li>
+          }
+
+
+
           <li className="nav-item">|</li>
 
-          <li className="nav-item hover" >
+         {userLoggedin ? null : <li className="nav-item hover" >
             <Link className="nav-link pages" to='/Signup'>
               Signup
             </Link>
-          </li>
+          </li> }
 
-          <li className="nav-item hover" >
+         {userLoggedin ? <li className="nav-item hover" >
             <Link className="nav-link pages" to='/Create-product'>
              create product
             </Link>
-          </li>
+          </li> :null}
+
+          {userLoggedin ?
+            <li className="nav-item d-flex hover">
+              {/* <img src="./user.png" style={{width:'20px', height:'20px'}} alt="" /> */}
+            <Link className="nav-link pages" onClick={()=>{
+              dispatch({
+                type:"USER_LOGGED_OUT"
+              })
+            }}  to='/'>
+              Logout
+
+            </Link>
+          </li> : null
+          }
 {/* ========================================language dropdown ============================================ */}
           {/* <li className="nav-item dropdown hover">
             <a

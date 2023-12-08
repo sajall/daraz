@@ -16,6 +16,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { WishList } from "./components/WishList/WishList";
 import { Users } from "./components/Users/Users";
+import { Dashboard } from "./components/Dashboard/Dashboard";
 
 
 function App() {
@@ -51,6 +52,9 @@ function App() {
           <Route path='/add-to-cart' element={<Cart ></Cart>}></Route>
           <Route path='/wishlist' element={<WishList ></WishList>}></Route>
           <Route path='/show-users' element={<Users ></Users>}></Route>
+          <Route path='/Dashboard' element={<Dashboard ></Dashboard>}></Route>
+
+          
 
 
         </Routes>

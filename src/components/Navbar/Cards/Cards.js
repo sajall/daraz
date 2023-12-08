@@ -17,7 +17,7 @@ let dispatch = useDispatch();
       <div
         className="card"
         id="cardBody"
-        style={{ width: "12rem", height: "20rem" }}
+        style={{ width: "12rem", height: "22rem" }}
       >
         {children}
         <img
@@ -55,9 +55,9 @@ let dispatch = useDispatch();
             activeColor="#ffd700"
           />
 
-          <button>
+          <button id="detailsbtn" className="btn btn-primary">
             <NavLink
-              style={{ textDecoration: "none" }}
+              style={{ textDecoration: "none" ,  color: 'white' }}
               to={`product-details/${product.id}`}
             >
               show details

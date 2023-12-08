@@ -1,0 +1,17 @@
+#usertable{
+    width: 400px;
+    margin: auto;
+}
+#usertable > tr{
+    border-top: 2px solid black;
+}
+#usertable> tr >td{
+    border: 2px solid black;
+}
+#usertable thead th{
+    border: 2px solid black;
+
+}
+#user{
+    text-align: center;
+}

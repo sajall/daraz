@@ -1,89 +1,81 @@
 import { useForm } from "react-hook-form"
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { v4 } from "uuid";
+
 
 
 
 export function Login({user , setUser}){
-let {handleSubmit , register , formState:{errors}} = useForm();
-function loginData(data){
-console.log(data);
+  let move = useNavigate();
+ let dispatch =  useDispatch();
+ let users =useSelector((store)=>store.UsersSection.users);
 
-}
-
+    let {register , handleSubmit , formState:{errors}} = useForm();
+    function saveData(data){
+      console.log(data);
+      data.id = v4();
+      let userFound= users.find((user)=>{
+        if(data.email == user.email && data.password == user.password){
+          return true;
+        }
+      })
+      if(userFound){
+       move('/Dashboard');
+        dispatch({
+          type: "USER_LOGGEDIN",
+          payload:userFound
+        })
+      }
+    }
     return (
         <>
         
-        <form className="vh-100 gradient-custom" onSubmit={handleSubmit(loginData)}>
-  {/* <div className="container py-5 h-100 bg-success"> */}
+        <form className="vh-100 "  onSubmit={handleSubmit(saveData)}>
+  <div className="container  h-100 ">
     <div className="row d-flex justify-content-center align-items-center h-100 ">
       <div className="col-12 col-md-8 col-lg-6 col-xl-5 ">
-        <div
-          className="card bg-dark text-white "
-          style={{ borderRadius: "1rem" , width:'450px', height:'500px'  }}
-          
-
-        >
-          <div className="card-body p-5   text-center" >
-            <div className="mb-md-5 mt-md-2 pb-2">
-              <h2 className="fw-bold mb-2 text-uppercase">Login</h2>
-              <p className="text-white-50 mb-5">
-                Please enter your email and password!
-              </p>
-              <div className="form-outline form-white mb-4">
-                <label className="form-label" htmlFor="typeEmailX">
-                  Email
-                </label>
-                <input
-                {...register('email' ,{required:true ,validate:((value)=>{
-                let userFound = user.find((item)=>{
-                    if(item.email == value){
-                        return item;
-                    }
-                })
-                if(userFound){
-                    return true;
-                }else{
-                    return false;
-                }
-                })})}
-                  type="email"
-                  id="typeEmailX"
-                  className="form-control form-control-lg"
-                />
-              {errors.email && errors.email.type == "required" ? <div className="errors">please enter valid email address</div> : null}
-              {errors.email && errors.email.type == "validate" ? <div className="errors">user alredy exists</div> : null}
-
-              </div>
-              <div className="form-outline form-white mb-4">
-                <label className="form-label" htmlFor="typePasswordX">
-                  Password
-                </label>
-                <input
+        <div className="card shadow-2-strong bg-dark" style={{ borderRadius: "1rem" }}>
+          <div className="card-body p-5 text-center">
+            <h3 className="mb-5" style={{color:'white'}}>Login Now</h3>
+            <div className="form-outline mb-4">
+              <label className="form-label" htmlFor="typeEmailX-2" style={{color:'white'}}>
+                Email
+              </label>
+              <input
+              {...register('email' , {required:true})}
+                type="email"
+                id="typeEmailX-2"
+                className="form-control form-control-lg"
+              />
+              {errors.email ? <div className="errors">please enter valid email address</div> : null}
+            </div>
+            <div className="form-outline mb-4">
+              <label className="form-label" htmlFor="typePasswordX-2" style={{color:'white'}}>
+                Password
+              </label>
+              <input
               {...register('password' , {required:true})}
-                  type="password"
-                  id="typePasswordX"
-                  className="form-control form-control-lg"
-                />
+
+                type="password"
+                id="typePasswordX-2"
+                className="form-control form-control-lg"
+              />
               {errors.password ? <div className="errors">please enter correct password</div> : null}
 
-              </div>
-             
-              <button
-                className="btn btn-outline-light btn-lg px-5"
-                type="submit"
-              >
-                Login
-              </button>
             </div>
-          
+         
+            <button className="btn btn-primary btn-lg btn-block" type="submit">
+              Login
+            </button>
+       
           </div>
         </div>
       </div>
     </div>
-  {/* </div> */}
+  </div>
 </form>
 
-
-        
         </>
     )
 }

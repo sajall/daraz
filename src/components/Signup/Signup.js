@@ -1,15 +1,20 @@
 import { useForm } from "react-hook-form"
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { v4 } from "uuid";
 
 
 
 
 export function Signup({user , setUser}){
-
+let navigate =useNavigate();
  let dispatch =  useDispatch();
 
     let {register , handleSubmit , formState:{errors}} = useForm();
     function saveData(data){
+      data.id = v4();
+      console.log(data);
+      navigate('/Login')
       dispatch({
         type: "ADD_USER",
         payload:data
