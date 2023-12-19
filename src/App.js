@@ -1,7 +1,7 @@
 
 import "./App.css";
 import { Navbar } from "./components/Navbar/Navbar";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Route, Routes } from "react-router-dom";
 import { BrowserRouter as Router } from "react-router-dom";
@@ -17,12 +17,42 @@ import 'react-toastify/dist/ReactToastify.css';
 import { WishList } from "./components/WishList/WishList";
 import { Users } from "./components/Users/Users";
 import { Dashboard } from "./components/Dashboard/Dashboard";
+import axios from "axios";
+import { useDispatch } from "react-redux";
 
 
 function App() {
   
   // signup form k liy user ka data store krny k liye
   let [user, setUser] = useState([]);
+  let dispatch = useDispatch();
+
+
+  useEffect(()=>{
+    axios.post('/check-token' , {token:localStorage.getItem('someToken')} ).then((resp)=>{
+      console.log(resp.data.data , 'this is data rponse on app.js') ;
+      if(resp.data){
+        dispatch({
+          type: "USER_LOGGEDIN",
+          payload:resp.data.data
+        })
+      }
+    })
+  } , [])
+
+
+
+
+  // useEffect(()=>{
+  //   axios.post('/check-token' ,{token:localStorage.getItem('someToken')}).then((resp)=>{
+  // if(resp.data){
+  //   dispatch({
+  //     type :  "USER_LOGIN_HOGYA",
+  //     payload : resp.data
+  //   })
+  // }
+  //   })
+  // } , []);
 
   return (
     <>
@@ -37,6 +67,7 @@ function App() {
             path="/Signup"
             element={<Signup user={user} setUser={setUser}></Signup>}
           ></Route>
+          <Route path="/Signup/:id" element={<Signup></Signup>}></Route>
           <Route
             path="/"
             element={

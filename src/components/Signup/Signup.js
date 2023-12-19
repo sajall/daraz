@@ -1,25 +1,67 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form"
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { v4 } from "uuid";
 
 
 
 
 export function Signup({user , setUser}){
+
+  let params = useParams();
+
+
 let navigate =useNavigate();
  let dispatch =  useDispatch();
 
-    let {register , handleSubmit , formState:{errors}} = useForm();
+//  recalling get api that i made in users page
+const recallGetApi = async()=>{
+  await axios.get('/user-lao' ).then((resp)=>{
+
+
+   });
+}
+
+    let {register , handleSubmit  , reset, formState:{errors}} = useForm();
     function saveData(data){
-      data.id = v4();
+      if(params.id){
+          axios.put(`/update-user/${params.id}` ,data).then((resp)=>{
+              if(resp.status === 200){
+                recallGetApi();
+              }
+          });
+      }else{
+        // data.id = v4();
+        axios.post('/create-user' , data).then((resp)=>{
+  
+        })
+      }
       console.log(data);
       navigate('/Login')
-      dispatch({
-        type: "ADD_USER",
-        payload:data
-      })
+      // dispatch({
+      //   type: "ADD_USER",
+      //   payload:data
+      // })
+
     }
+     
+
+    let [showuser , setShowuser] = useState({});
+    useEffect(()=>{
+      reset(showuser);
+    },[showuser])
+
+    useEffect(()=>{
+      if(params.id){
+        axios.get('/user-to-update?id='+params.id).then((resp)=>{
+        console.log(resp.data);
+        setShowuser(resp.data);
+        
+        });
+      }
+    },[])
     return (
         <>
         

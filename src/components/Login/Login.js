@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useForm } from "react-hook-form"
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -9,25 +10,28 @@ import { v4 } from "uuid";
 export function Login({user , setUser}){
   let move = useNavigate();
  let dispatch =  useDispatch();
- let users =useSelector((store)=>store.UsersSection.users);
+//  let users =useSelector((store)=>store.UsersSection.users);
 
     let {register , handleSubmit , formState:{errors}} = useForm();
-    function saveData(data){
-      console.log(data);
-      data.id = v4();
-      let userFound= users.find((user)=>{
-        if(data.email == user.email && data.password == user.password){
-          return true;
-        }
-      })
-      if(userFound){
-       move('/Dashboard');
-        dispatch({
-          type: "USER_LOGGEDIN",
-          payload:userFound
-        })
-      }
+    const saveData = async (data)=>{
+      console.log(data , 'data');
+      
+await axios.put('/find-user' , data).then((resp)=>{
+  console.log(resp.data , 'this is loggeduser found');
+  if(resp.status === 200){
+    localStorage.setItem("someToken" ,resp.data.myToken)
+   move('/Dashboard');
+    dispatch({
+      type: "USER_LOGGEDIN",
+      payload:resp.data.data
+    })
+  }else{
+    alert('invalid credentials')
+  }
+})
     }
+
+
     return (
         <>
         

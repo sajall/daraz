@@ -1,14 +1,37 @@
 import { useDispatch, useSelector } from "react-redux"
 import store from "../../Store/Store";
 import './Users.css';
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { Link, useParams } from "react-router-dom";
 
+axios.defaults.baseURL = "http://localhost:6070/"
 export function Users(){
     
-let data = useSelector((store)=>{
-    return store.UsersSection;
-});
+// let data = useSelector((store)=>{
+//     return store.UsersSection;
+// });
 
 
+let [users , setUsers] = useState([]);
+
+
+useEffect(()=>{
+    axios.get('/user-lao' ).then((resp)=>{
+        setUsers(resp.data.data);
+        console.log(resp.data.data, 'users data response');
+
+    });
+},[]);
+
+// recalling the get api 
+const recallGetApi = async()=>{
+   await axios.get('/user-lao' ).then((resp)=>{
+        setUsers(resp.data.data);
+        console.log(resp.data.data, 'users data response');
+
+    });
+}
 // useDispatch
 let dispatch = useDispatch();
 let userCreatedproducts = useSelector((store)=>store.productsSection.products)
@@ -23,24 +46,29 @@ let userCreatedproducts = useSelector((store)=>store.productsSection.products)
             <th>user email</th>
             <th>user password</th>
             <th>Delete User</th>
+            <th>Edit</th>
+            <th>User's products</th>    
             </tr>
         </thead>
 {
-    data.users.map((item)=>{
-        console.log(item.id , 'jhuejfhbkebkhj');
+    users && users.map((item , index)=>{
+        // console.log(item.id , 'jhuejfhbkebkhj');
         return(
 
             <tr>
             <td>{item.email}</td>
             <td>{item.password}</td>
             <td><button onClick={()=>{
-                 dispatch({
-                    type:"DELETE_USER",
-                    payload:item.id
+                axios.delete('/delete-user?id='+item._id  ).then((resp)=>{
+                     if(resp.status === 200){
+                        recallGetApi();
+                     }
                 });
-            }}>Delete</button></td>
+            }} > Delete</button></td>
 
-            <td>
+           <td> <button> <Link to={'/signup/'+item._id}>edit</Link> </button> </td>
+
+            {/* <td>
                 <ol>
                     {userCreatedproducts.filter((product)=>{
     if(product.owner == item.id){
@@ -50,7 +78,7 @@ let userCreatedproducts = useSelector((store)=>store.productsSection.products)
                         return <li>{product.category}</li>
                     })}
                 </ol>
-            </td>
+            </td> */}
            
         </tr>
     )
@@ -66,3 +94,11 @@ let userCreatedproducts = useSelector((store)=>store.productsSection.products)
 
 
 
+
+            {/* //  dispatch({ */}
+            //     type:"DELETE_USER",
+            //     payload:item.id
+            {/* // }); */}
+            // get of delete mn  dossry parameter mn data send nh kr skty is k liy query params use hoty hyn
+            // post or put mn data ja skta hy 
+            // query param chota mota data send krny k liy use hota hy

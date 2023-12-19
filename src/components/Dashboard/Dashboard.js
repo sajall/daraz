@@ -8,11 +8,11 @@ export function Dashboard(){
      return store.UsersSection.userLoggedin
     });
    
-    let userCreatedproducts = useSelector((store)=>store.productsSection.products).filter((item)=>{
-        if(item.owner == user.id){
-            return true;
-        }
-    });
+    // let userCreatedproducts = useSelector((store)=>store.productsSection.products).filter((item)=>{
+    //     if(item.owner == user.id && user.id){
+    //         return true;
+    //     }
+    // });
 
     return(
         <>
@@ -25,8 +25,8 @@ export function Dashboard(){
             </tr>
         </thead>
         <tbody>
-{
-    userCreatedproducts.map((item)=>{
+{/* {
+    userCreatedproducts?.map((item)=>{
        return(
        <tr>
        <td><img src={item.src} alt="" style={{width:"100px" }} /></td>
@@ -41,7 +41,7 @@ export function Dashboard(){
        </tr>
        )
     })
-   }
+   } */}
             
         </tbody>
     </table>
